@@ -1,6 +1,6 @@
 const electron = require('electron');
 
-const { app, BrowserWindow, Menu } = electron;
+const { app, BrowserWindow, Menu, ipcMain } = electron;
 
 let mainWindow;
 let addWindow;
@@ -22,9 +22,16 @@ function createAddWindow() {
     height: 200,
     title: 'Add New Todo'
   }); 
-  addWindow.loadURL(`file://${__dirname}/add.html`)
+  addWindow.loadURL(`file://${__dirname}/add.html`);
+  addWindow.on('closed', () => addWindow = null); //sets value of addWindow to null to free up memory
 } 
 // Here we define a function the creates a new browser window but instead of passing in an empty object which returns a default spec window, we define some parameters such as width and height (both take pixel values) and a title to instruct the user what to do with this pop up window. We will pass this function to our submenu label 'new todo'.
+
+ipcMain.on('todoAdd', (event, todo) => {
+  mainWindow.webContents.send('todoAdd', todo);
+  addWindow.close(); //closes add todo window once todo submitted
+})
+
 
 const menuTemplate = [
   {
