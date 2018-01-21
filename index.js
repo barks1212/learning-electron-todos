@@ -63,6 +63,7 @@ if (process.env.NODE_ENV !== 'production') {
   menuTemplate.push({
     label: 'DEVELOPER!',
     submenu: [
+      { role: 'reload'  }, //this is an electron preset to make life easier when getting back dev options
       {
         label:'Toggle Developer Tools',
         accelerator: process.platform === 'darwin' ? 'Command+Alt+I' : 'Ctrl+Shift+I',
