@@ -51,3 +51,19 @@ if (process.platform=== 'darwin') {
   menuTemplate.unshift({})
 }
 //Here we are checking what operating system the user is running. Darwin refers to OSX. Our problem was that the first label we define on OSX gets hidden automatically under the name of the app (electron in this case) whereas windows users would correctly see "file". To get around this we append an empty object onto our template if the user is on OSX.
+
+if (process.env.NODE_ENV !== 'production') {
+  menuTemplate.push({
+    label: 'DEVELOPER!',
+    submenu: [
+      {
+        label:'Toggle Developer Tools',
+        accelerator: process.platform === 'darwin' ? 'Command+Alt+I' : 'Ctrl+Shift+I',
+        click(item, focusedWindow) {
+          focusedWindow.toggleDevTools();
+        }
+      }
+    ]
+  });
+}
+//We have a problem - we dont have access to developer tools since we overrode the default electron taskbar which included the label and keybind to open up a console. To rectify this we check that the node environment is not in "production" if it isnt we push a new property onto the taskbar and define it as developer. In the developer dropdown we define the label "toggle developer tools", give it the correct key binding per platform with the accelerator key and define its onclick function. The click function here takes two arguments, the first of which we arent interested in. Focused window simply allows the function to be called on whichever window the dev is focussed on at the time. Calling .toggleDevTools opens up the console.
