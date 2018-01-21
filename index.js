@@ -39,10 +39,12 @@ const menuTemplate = [
     submenu: [
       {
         label: 'New Todo',
+        accelerator: process.platform === 'darwin' ? 'Command+N' : 'Ctrl+N',
         click() { createAddWindow() }
       },
       {
         label: 'Clear Todos',
+        accelerator: process.platform === 'darwin' ? 'Command+D' : 'Ctrl:D',
         click() {
           mainWindow.webContents.send('clearTodos')
         }
